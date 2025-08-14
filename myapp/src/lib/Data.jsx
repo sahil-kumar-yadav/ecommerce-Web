@@ -5,7 +5,7 @@ const products = [
     description: "The latest Apple flagship with A17 Pro chip and titanium build.",
     price: 129999,
     category: "Mobiles",
-    image: "/products/iphone15pro.jpg",
+    image: "/iPhone15Pro.png",
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ const products = [
     description: "Samsung's most powerful smartphone with AI features.",
     price: 119999,
     category: "Mobiles",
-    image: "/products/galaxys24ultra.jpg",
+    image: "/Samsung Galaxy S24 Ultra.png",
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ const products = [
     description: "Ultimate power for professionals with 40-core GPU.",
     price: 329999,
     category: "Laptops",
-    image: "/products/macbookpro16.jpg",
+    image: "/macbookpro16.png",
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ const products = [
     description: "Premium Windows laptop with OLED display.",
     price: 199999,
     category: "Laptops",
-    image: "/products/dellxps15.jpg",
+    image: "/dellxps15.png",
   },
   {
     id: 5,
@@ -37,7 +37,7 @@ const products = [
     description: "High-performance tablet with Apple Pencil support.",
     price: 99999,
     category: "Tablets",
-    image: "/products/ipadpro.jpg",
+    image: "/ipadpro.png",
   },
   {
     id: 6,
@@ -45,7 +45,7 @@ const products = [
     description: "Massive 14.6” AMOLED display with S Pen.",
     price: 119999,
     category: "Tablets",
-    image: "/products/galaxytabs9ultra.jpg",
+    image: "/galaxytabs9ultra.png",
   },
 ];
 

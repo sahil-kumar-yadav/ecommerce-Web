@@ -3,13 +3,33 @@
 import Link from "next/link";
 import { ShoppingCart, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import productsData from "@/lib/Data";
 
 export default function Home() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Filters
+  const [category, setCategory] = useState("All");
+  const [minPrice, setMinPrice] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Apply filters
+  const filteredProducts = productsData.filter((product) => {
+    const matchesCategory =
+      category === "All" || product.category === category;
+    const matchesPrice = product.price >= minPrice;
+    return matchesCategory && matchesPrice;
+  });
 
   return (
     <main>
+      {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10 opacity-30 blur-3xl"
@@ -36,17 +56,19 @@ export default function Home() {
               View Cart
             </Link>
 
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-xl px-3 py-2 border border-white/10 hover:bg-white/5 transition focus-ring"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </button>
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="rounded-xl px-3 py-2 border border-white/10 hover:bg-white/5 transition focus-ring"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+            )}
           </div>
         </header>
 
@@ -64,34 +86,77 @@ export default function Home() {
             Mobiles, laptops, tablets — browse, filter, search, and checkout
             with a delightful UI.
           </p>
-
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="#"
-              className="rounded-xl px-6 py-3 bg-brand-600 text-white hover:bg-brand-700 shadow-soft focus-ring"
-            >
-              Start Exploring
-            </Link>
-          </div>
         </section>
       </div>
 
-      <section className="container-slim py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="rounded-2xl border border-white/10 dark:bg-[var(--card)] bg-white p-6 hover:shadow-soft transition"
-            >
-              <div className="h-40 rounded-xl bg-gradient-to-br from-brand-100 to-accent/20 dark:from-brand-800/40 dark:to-accent/10 mb-4" />
-              <div className="h-4 w-32 bg-gray-200 dark:bg-white/10 rounded mb-2" />
-              <div className="h-4 w-44 bg-gray-200 dark:bg-white/10 rounded mb-6" />
-              <div className="h-9 w-28 rounded-xl bg-brand-600/90 hover:bg-brand-700 text-white grid place-items-center">
-                View
+      {/* Filter Controls */}
+      <section className="container-slim flex flex-wrap gap-4 justify-center mb-10">
+        {/* Category Filter */}
+        {["All", "Mobiles", "Laptops", "Tablets"].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-4 py-2 rounded-xl border ${
+              category === cat
+                ? "bg-brand-600 text-white"
+                : "bg-white dark:bg-[var(--card)] text-gray-800 dark:text-white"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+
+        {/* Price Filter */}
+        {[0, 29999, 49999, 69999].map((price) => (
+          <button
+            key={price}
+            onClick={() => setMinPrice(price)}
+            className={`px-4 py-2 rounded-xl border ${
+              minPrice === price
+                ? "bg-brand-600 text-white"
+                : "bg-white dark:bg-[var(--card)] text-gray-800 dark:text-white"
+            }`}
+          >
+            {price === 0 ? "All Prices" : `₹${price}+`}
+          </button>
+        ))}
+      </section>
+
+      {/* Product Listing */}
+      <section id="products" className="container-slim pb-16">
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="rounded-2xl border border-white/10 dark:bg-[var(--card)] bg-white p-6 hover:shadow-soft transition"
+              >
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="h-40 w-full object-cover rounded-xl mb-4"
+                />
+                <h3 className="text-lg font-semibold">{product.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                  {product.description}
+                </p>
+                <p className="text-brand-600 font-bold mb-4">
+                  ₹{product.price}
+                </p>
+                <Link
+                  href={`/product/${product.id}`}
+                  className="block h-9 w-28 rounded-xl bg-brand-600 hover:bg-brand-700 text-white grid place-items-center"
+                >
+                  View
+                </Link>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-lg text-gray-600 dark:text-gray-300">
+            No products match your filter.
+          </p>
+        )}
       </section>
     </main>
   );
