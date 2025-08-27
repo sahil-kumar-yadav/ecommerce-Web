@@ -19,10 +19,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ClientWrapper>
+            {children}
+          </ClientWrapper>
+          <Toaster richColors position="top-right" closeButton />
+        </ThemeProvider>
       </body>
     </html>
   );
